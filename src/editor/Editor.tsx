@@ -66,7 +66,7 @@ export default function Editor() {
     ptrs.current.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
     const st = useEditor.getState();
     if (ptrs.current.size === 2) {
-      const [a, b] = [...ptrs.current.values()];
+      const [a, b] = [...ptrs.current.values()] as { x: number; y: number }[];
       g.current = { mode: "pinch", d: Math.hypot(a.x - b.x, a.y - b.y), cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, zoom: st.zoom, pan: st.pan };
       setGuides({ v: [], h: [] });
       return;
@@ -93,7 +93,7 @@ export default function Editor() {
     const st = useEditor.getState();
     const rect = wrap.current!.getBoundingClientRect();
     if (G.mode === "pinch") {
-      const [a, b] = [...ptrs.current.values()]; if (!b) return;
+      const [a, b] = [...ptrs.current.values()]; if (!a || !b) return;
       const d = Math.hypot(a.x - b.x, a.y - b.y);
       const z = Math.min(4, Math.max(0.15, G.zoom * (d / G.d)));
       const cx = (a.x + b.x) / 2 - rect.left, cy = (a.y + b.y) / 2 - rect.top;

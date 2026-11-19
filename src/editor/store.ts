@@ -92,13 +92,13 @@ export const useEditor = create<S>((set, get) => ({
     get().commit();
     set((s) => {
       const a = [...s.els]; const i = a.findIndex((e) => e.id === id); if (i < 0) return {};
-      const [e] = a.splice(i, 1);
+      const [e] = a.splice(i, 1); if (!e) return {};
       const j = dir === "top" ? a.length : dir === "bottom" ? 0 : dir === "up" ? Math.min(a.length, i + 1) : Math.max(0, i - 1);
       a.splice(j, 0, e); return { els: a };
     });
   },
-  undo: () => set((s) => s.past.length ? { els: s.past[s.past.length - 1], past: s.past.slice(0, -1), future: [s.els, ...s.future] } : {}),
-  redo: () => set((s) => s.future.length ? { els: s.future[0], future: s.future.slice(1), past: [...s.past, s.els] } : {}),
+  undo: () => set((s) => s.past.length ? { els: s.past[s.past.length - 1]!, past: s.past.slice(0, -1), future: [s.els, ...s.future] } : {}),
+  redo: () => set((s) => s.future.length ? { els: s.future[0]!, future: s.future.slice(1), past: [...s.past, s.els] } : {}),
   load: (els) => set({ els, past: [], future: [], sel: null }),
 }));
 
